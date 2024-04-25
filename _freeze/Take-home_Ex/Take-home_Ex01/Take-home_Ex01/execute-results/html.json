@@ -1,0 +1,15 @@
+{
+  "hash": "c1b786daae974369129057174c89fe0b",
+  "result": {
+    "supporting": [
+      "Take-home_Ex01_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
