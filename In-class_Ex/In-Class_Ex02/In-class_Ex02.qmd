@@ -1,0 +1,28 @@
+---
+title: "In-class_Ex02"
+author: "Mohamad Hafez Sidek"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+**Installing R Packages**
+
+```{r message=FALSE, warning=FALSE}
+pacman::p_load(ggrepel, patchwork, 
+               ggthemes, hrbrthemes,
+               tidyverse)
+```
+
+**Loading Data**
+
+```{r message=FALSE, warning=FALSE}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+Visualing Histogram
+
