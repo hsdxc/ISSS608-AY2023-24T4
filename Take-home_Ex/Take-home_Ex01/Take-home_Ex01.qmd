@@ -14,7 +14,7 @@ execute:
 
 ```{r message=FALSE, warning=FALSE}
 
-pacman::p_load(readr,dplyr,tidyverse,lubridate)
+pacman::p_load(readr,dplyr,tidyverse,lubridate,ggplot2,stringr)
 ```
 
 **Load and Consolidate Data**
