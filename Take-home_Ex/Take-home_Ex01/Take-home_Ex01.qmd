@@ -136,7 +136,7 @@ ggplot(realis2024Q1, aes(x = `Property Type`, y = `Unit Price ($ PSM)`, fill = `
 
 ```
 
-**\*\* EDA 2 \*\* Insert Analysis Here**
+**\*\* EDA 2 \*\***
 
 The boxplot analysis highlights several significant findings, with a focus on median prices:
 
