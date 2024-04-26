@@ -15,7 +15,7 @@ execute:
 ```{r message=FALSE, warning=FALSE}
 pacman::p_load(ggrepel, patchwork, 
                ggthemes, hrbrthemes,
-               tidyverse)
+               tidyverse,ggplot2)
 ```
 
 **Loading Data**

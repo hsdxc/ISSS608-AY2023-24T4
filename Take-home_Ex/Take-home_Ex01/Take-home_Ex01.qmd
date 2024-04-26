@@ -38,7 +38,7 @@ realis$`Nett Price($)` <- as.numeric(gsub("[^0-9.]", "", realis$`Nett Price($)`)
 
 ```
 
-**Filter first quarter of 2024**
+**Filter first quarter of 2024 only**
 
 ```{r message=FALSE, warning=FALSE}
 
@@ -65,14 +65,14 @@ Number_of_Units_by_Property_Type <- Number_of_Units_by_Property_Type %>%
   mutate(`Property Type` = factor(`Property Type`, levels = `Property Type`))
 ```
 
-**Calculate cumulative percentage**
+**Calculate cumulative percentage of total units by Property Type**
 
 ```{r message=FALSE, warning=FALSE}
 Number_of_Units_by_Property_Type <- Number_of_Units_by_Property_Type %>%
   mutate(Cumulative_Percentage = cumsum(`Total Number of Units`) / sum(`Total Number of Units`) * 100)
 ```
 
-**Plot chart**
+**Plot Pareto chart**
 
 ```{r message=FALSE, warning=FALSE}
 ggplot(data = Number_of_Units_by_Property_Type, aes(x = `Property Type`)) +
@@ -93,3 +93,49 @@ Pareto chart distinctly illustrates the imbalance in property types, with Condom
 This suggests higher demand or greater supply in these sectors. As the chart progresses towards more exclusive properties like Terrace Houses, Semi-Detached, and Detached Houses, there's a notable decline in unit numbers, hinting at lesser availability or possibly higher pricing brackets for such properties.
 
 This trend is significant for stakeholders, indicating a potential focus area for both market demand and real estate development strategies.
+
+**Create new columns**
+
+```{r message=FALSE, warning=FALSE}
+#Determine the address unit level.
+realis2024Q1 <- realis2024Q1 %>%
+  mutate("Floor Level" = if_else(str_detect(Address, '#'),
+                                   str_trim(str_extract(str_split(Address, "#", simplify = TRUE)[, 2], "^[^\\-]*")),
+                                   "N.A."))
+
+#Determine the address unit level category (Low, middle or high).
+realis2024Q1 <- realis2024Q1 %>%
+  mutate(`Floor Level Category` = case_when(
+    `Property Type` %in% c("Terrace House", "Semi-Detached House", "Detached House") ~ "N.A.",
+    `Floor Level` == "N.A." ~ "Low",
+    as.integer(`Floor Level`) <= 5 ~ "Low",
+    as.integer(`Floor Level`) <= 10 ~ "Middle",
+    TRUE ~ "High"
+  ))
+
+
+```
+
+**Plot Boxplot**
+
+```{r message=FALSE, warning=FALSE}
+# Reorder levels of 'Property Type' alphabetically
+realis2024Q1$`Property Type` <- factor(realis2024Q1$`Property Type`, levels = c("Apartment","Condominium","Terrace House","Detached House", "Semi-Detached House","Executive Condominium"))
+
+# Reorder levels of 'Floor Level Category' by "High", "Middle", "Low"
+realis2024Q1$`Floor Level Category` <- factor(realis2024Q1$`Floor Level Category`, levels = c("High", "Middle", "Low"))
+
+# Create the boxplot using ggplot2
+ggplot(realis2024Q1, aes(x = `Property Type`, y = `Unit Price ($ PSM)`, fill = `Floor Level Category`)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("N.A." = "gray", "Low" = "blue1", "Middle" ="blue3", "High" = "blue4")) +
+  labs(x = "Property Type", y = "Unit Price ($ PSM)", fill = "Floor Level Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+\*\* Analysis \*\*
+Insert Analysis Here
+
+
