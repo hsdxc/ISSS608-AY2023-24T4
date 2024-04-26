@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p><strong>Installing R Packages</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(readr,dplyr,tidyverse,lubridate,ggplot2,stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse,ggplot2,readr,dplyr,lubridate,stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Load and Consolidate Data</strong></p>
 <div class="cell">
@@ -263,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>** Analysis **</p>
+<p><strong>** EDA 1 **</strong></p>
 <p>Pareto chart distinctly illustrates the imbalance in property types, with Condominiums and Apartments not only dominating the market but also highlighting the Pareto principle—these categories alone account for a disproportionate 75% of the total units.</p>
 <p>This suggests higher demand or greater supply in these sectors. As the chart progresses towards more exclusive properties like Terrace Houses, Semi-Detached, and Detached Houses, there’s a notable decline in unit numbers, hinting at lesser availability or possibly higher pricing brackets for such properties.</p>
 <p>This trend is significant for stakeholders, indicating a potential focus area for both market demand and real estate development strategies.</p>
@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Plot Boxplot</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder levels of 'Property Type' alphabetically</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">factor</span>(realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Apartment"</span>,<span class="st">"Condominium"</span>,<span class="st">"Terrace House"</span>,<span class="st">"Detached House"</span>, <span class="st">"Semi-Detached House"</span>,<span class="st">"Executive Condominium"</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">factor</span>(realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Apartment"</span>,<span class="st">"Condominium"</span>,<span class="st">"Terrace House"</span>, <span class="st">"Semi-Detached House"</span>,<span class="st">"Detached House"</span>,<span class="st">"Executive Condominium"</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder levels of 'Floor Level Category' by "High", "Middle", "Low"</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Floor Level Category</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">factor</span>(realis2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Floor Level Category</span><span class="st">`</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"High"</span>, <span class="st">"Middle"</span>, <span class="st">"Low"</span>))</span>
@@ -304,7 +304,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>** Analysis ** Insert Analysis Here</p>
+<p><strong>** EDA 2 ** Insert Analysis Here</strong></p>
+<p>The boxplot analysis highlights several significant findings, with a focus on median prices:</p>
+<ol type="1">
+<li><p>Terraced, semi-detached, and detached houses exhibit lower median prices in contrast to vertical living spaces such as apartments ,and condominiums. This discrepancy suggests a potential premium associated with apartment living, possibly attributed to location advantages, particularly in central urban areas.</p></li>
+<li><p>Condominiums generally boast higher median prices compared to apartments, indicative of additional amenities or sought after locations that elevate their market value.</p></li>
+<li><p>Executive condominiums stand out with the lowest median price among all property types, implying a level of affordability. This could be due to the regulatory price controls.</p></li>
+<li><p>Further exploration into median prices based on property type and floor levels reveals that higher floors command a premium for condominiums and apartments.</p></li>
+<li><p>In contrast, executive condominiums exhibit a more uniform pricing pattern across different floors, in comparison to apartments and condominiums.</p></li>
+</ol>
+<p><strong>** Summary**</strong></p>
+<p>The analysis of property types using Pareto charts sheds light on the distribution within the market. Condominiums and apartments emerge as prominent, aligning with the Pareto principle by occupying a significant portion of total units. This suggests either heightened demand or extensive supply in these segments.</p>
+<p>This finding is further corroborated by the examination of property types using boxplots. It highlights the preference for apartment living over traditional housing types, emphasizing the premium associated with such accommodations.</p>
+<p>In essence, these analyses provide valuable insights into the property market, emphasizing the dominance of condominiums and apartments and their impact on demand and pricing dynamics.</p>
 
 
 
