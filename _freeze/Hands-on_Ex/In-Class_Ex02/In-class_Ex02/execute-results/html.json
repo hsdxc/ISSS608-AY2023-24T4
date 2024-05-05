@@ -1,0 +1,14 @@
+{
+  "hash": "a43af5b1dce208cc6cfbd93accbbc14e",
+  "result": {
+    "markdown": "---\ntitle: \"In-class_Ex02\"\nauthor: \"Mohamad Hafez Sidek\"\ndate: \"April 13, 2024\"\ndate-modified: \"last-modified\"\nexecute:\n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n**Installing R Packages**\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse,ggplot2)\n```\n:::\n\n\n**Loading Data**\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data <- read_csv(\"data/Exam_data.csv\")\n```\n:::\n\n\nVisualing Histogram\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

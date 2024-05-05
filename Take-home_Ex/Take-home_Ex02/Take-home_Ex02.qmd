@@ -1,0 +1,95 @@
+---
+title: "Take-home_Ex02"
+author: "Mohamad Hafez Sidek"
+date: "May 5, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+**Critique**
+
+[![https://main\--spectacular-buttercream-d0f389.netlify.app/assignment_1#visualization-3](images/Untitled-01.jpg){fig-alt="https://main--spectacular-buttercream-d0f389.netlify.app/assignment_1#visualization-3"}](https://main--spectacular-buttercream-d0f389.netlify.app/assignment_1#visualization-3)
+
+1.  **Color Differentiation**: The colors used to represent different property types are too similar, making it hard to distinguish between them, especially when lines overlap or are close together.
+
+2.  **Axis Titles and Labels**: The x-axis labels are not immediately clear as they use a 'YYMM' format without explaining that this stands for 'Year-Month'. Both axes would benefit from clearer, more descriptive titles.
+
+3.  **Line Style**: Utilizing different line styles (like dashed or dotted) for each property type could help differentiate them better.
+
+**Sketch**
+
+![](images/Sketch.jpg){width="563"}
+
+**Installing R Packages**
+
+```{r message=FALSE, warning=FALSE}
+
+pacman::p_load(tidyverse,ggplot2,readr,dplyr,lubridate,stringr)
+
+```
+
+**Load and Consolidate Data**
+
+```{r message=FALSE, warning=FALSE}
+options(readr.show_col_types = FALSE)
+options(warn = -1)
+
+# Load and prepare data
+df <- list.files(path = 'D:/HS/ISSS608-AY2023-24T4/Take-home_Ex/Take-home_Ex02/data', full.names = TRUE) %>% 
+  lapply(read_csv) %>% 
+  bind_rows() %>%
+  mutate(`Sale Date` = as.Date(`Sale Date`, format = "%d %b %Y"))
+```
+
+**Data Preparation**
+
+```{r message=FALSE, warning=FALSE}
+
+df_unit_price <- df %>%
+  group_by(month = format(`Sale Date`, format="%y-%m"), `Property Type`) %>%
+  summarize(`Unit Price ($ PSF)` = mean(`Unit Price ($ PSF)`))
+
+# Filter data for only Quarter 1 2024
+df_filtered <- df %>%
+  filter(format(`Sale Date`, "%Y-%m") %in% c("2024-01","2024-02","2024-03"))
+
+# Calculate average unit price for each property type for March 2023 and March 2024
+avg_prices <- df_filtered %>%
+  group_by(`Property Type`) %>%
+  summarize(`Average Unit Price ($ PSF)` = mean(`Unit Price ($ PSF)`))
+
+# Convert 'Sale Date' column in df_filtered to Date format
+df_filtered$`Sale Date` <- as.Date(df_filtered$`Sale Date`, format = "%Y-%m-%d")
+```
+
+**Plot Chart**
+
+```{r message=FALSE, warning=FALSE}
+
+ggplot(df_filtered, aes(x = `Sale Date`, y = `Unit Price ($ PSF)`, color = `Property Type`)) +
+  geom_line() +
+  facet_wrap(~`Property Type`, scales = "free_y") +  # Faceting by property type
+  geom_text(data = avg_prices, aes(label = paste("Avg:", round(`Average Unit Price ($ PSF)`, 2)), x = max(df_filtered$`Sale Date`, na.rm = TRUE), y = Inf), hjust = 1, vjust = 1, size = 3) + # Add average price annotations
+  geom_hline(data = avg_prices, aes(yintercept = `Average Unit Price ($ PSF)`, color = `Property Type`), linetype = "dashed", color = "black") +  # Add horizontal mean lines
+  ggtitle("Unit Price (PSF) across different property types for Q1 2024") +
+  xlab("Sale Date") +
+  ylab("Mean Unit Price ($ PSF)")
+```
+
+**Improvements Made**
+
+1.  **Individual Panels for Each Property Type**: The use of separate panels for each property type greatly enhances readability. This layout allows each category to be individually examined without the lines overlapping, reducing visual clutter and making comparisons between categories easier.
+
+2.  **Color Coding and Legend**: Each property type is consistently colored across all panels, and the legend clearly distinguishes these colors. This uniformity helps in quickly identifying which color corresponds to which property type across different panels.
+
+3.  **Average Price Indication**: Each panel includes an average price annotation, making it easy to get a quick summary of the price trend for each property type without needing to assess the data points visually. This feature adds a useful layer of information at a glance.
+
+4.  **Vertical Axis Scaling**: Each panel is scaled individually for the vertical axis, which allows for a better view of the trends within each property type. This prevents the issue where high values in one category might compress the scale of another, making finer details hard to see.
+
+5.  **Consistent Time Frame Across Panels**: All panels cover the same time period (January to April), facilitating straightforward comparisons of trends over time between different property types.
+
+6.  **Clarity in Data Points**: The use of lighter lines and a less dense plotting of data points (compared to the jagged lines in the previous chart) improves the clarity of the visualization.

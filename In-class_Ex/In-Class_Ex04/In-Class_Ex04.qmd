@@ -1,0 +1,115 @@
+---
+title: "In-class_Ex04"
+author: "Mohamad Hafez Sidek"
+date: "May 04, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load(tidyverse,ggstatsplot)
+```
+
+------------------------------------------------------------------------
+
+**Loading Data**
+
+```{r}
+new_path <-"D:/HS/ISSS608-AY2023-24T4/In-class_Ex/In-Class_Ex04/"
+
+setwd(new_path)
+
+exam <- read_csv("data/Exam_data.csv")
+```
+
+------------------------------------------------------------------------
+
+**ghistostats**
+
+```{r}
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "parametric",
+  test.value = 60,
+  bin.args = list (color = "black",
+                   fill = "grey50",
+                   alpha = 0.7),
+  normal.curve = FALSE,
+  normal.curve.args = list (linewidth = 2),
+  xlab = "English Scores"
+)
+
+```
+
+**ggdot**
+
+```{r}
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  bin.args = list (color = "black",
+                   fill = "grey50",
+                   alpha = 0.7),
+  normal.curve = TRUE,
+  normal.curve.args = list (linewidth = 2),
+  xlab = "English Scores"
+)
+
+```
+
+```{r}
+ggdotplotstats(
+  data = exam,
+  x = ENGLISH,
+  y = CLASS,
+  title = "",
+  xlab = ""
+)
+```
+
+Data Grouping
+
+```{r}
+
+exam_long <-exam %>%
+  pivot_longer(
+    cols = ENGLISH:SCIENCE,
+    names_to ="SUBJECT",
+    values_to = "SCORES") %>%
+  filter (CLASS == "3A")
+
+```
+
+```{r}
+ggwithinstats(
+  data = filter(exam_long,
+                SUBJECT %in%
+                c("MATHS","SCIENCE")),
+  x = SUBJECT,
+  y = SCORES,
+  type = "p"
+)
+```
+
+```{r}
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = TRUE,
+  label.var = ID,
+  label.expression = ENGLISH > 90 & MATHS > 90,
+)
+```
