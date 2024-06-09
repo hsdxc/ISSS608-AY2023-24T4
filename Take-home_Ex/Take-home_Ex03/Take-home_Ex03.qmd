@@ -162,7 +162,7 @@ create_dendrogram <- function(nodes, edges, plot_title) {
     scale_y_reverse(expand = c(0.2, 0)) +
     ggtitle(plot_title) +
     theme_minimal() +
-    theme(plot.margin = unit(c(1, 1, 1, 10), "cm")) 
+    theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) 
 }
 
 # Create and plot the "before" dendrogram
@@ -175,6 +175,7 @@ create_dendrogram(filtered_nodes, after_edges, "After 2035-05-25")
 ```
 ***Analysis***
 Before the Incident (2035-05-25)
+
 SouthSeafood Express Corp was closely connected to:
 Namorna Transit Ltd.
 AguaLeska Transit N.V.
@@ -227,42 +228,54 @@ The incident involving SouthSeafood Express Corp did not drastically alter its i
 To determine which companies benefited from SouthSeafood Express Corp's legal troubles, we should look at the changes in the dendrogram before and after the incident. Companies that appear to have strengthened their positions or gained new connections post-incident are likely to have benefited.
 
 Analysis of Benefiting Companies
+
 1. GvardeyskAmerica Shipping Plc
 This company appears to have a stronger position in the post-incident dendrogram, with several new connections. This suggests it may have capitalized on the market opportunity created by SouthSeafood Express Corp's legal troubles.
+
 2. ArawakFish Cargo Ges.m.b.h.
 Positioned near the top in both dendrograms, ArawakFish Cargo Ges.m.b.h. seems to have retained a strong market position. The stability and potential new indirect connections imply it might have absorbed some of the business fallout.
+
 3. Macaama Ocean Worldwide LLC
 Similar to ArawakFish, this company maintains its position and potentially gains from reduced competition from SouthSeafood Express Corp.
+
 4. Oka Charter Boat Transport OJSC
 Another company that shows a stable and potentially strengthened network post-incident.
+
 5. Naddi Conti and Liam Conti
 These companies, originally in the same branch as SouthSeafood Express Corp, seem to have fewer but stronger connections post-incident, indicating they might have consolidated or absorbed some of the business.
+
 6. Namorna Transit Ltd. and AguaLeska Transit N.V.
 Despite being closely linked with SouthSeafood Express Corp, their continued presence and potential new connections suggest they managed to navigate the troubles effectively, possibly gaining from changes in the network dynamics.
+
 7. StichtingMarine Shipping Company
 Appears to have a stronger presence post-incident, indicating it might have captured some market share or business that SouthSeafood Express Corp lost.
+
 8. Savanteak Creek Solutions NV
 Shows signs of increased importance or new connections, which can be a direct benefit from the incident.
+
 9. NyanzaRiver Worldwides A/S and KisumaSeafoodBrothers Ltd.
 These companies have maintained their positions and might have benefited indirectly through reduced competition or new partnerships.
+
 10. RecHfish Freight Plc.
 This company shows a potential strengthening of its position in the post-incident network.
 Summary
+
 The companies that appear to have benefited the most from SouthSeafood Express Corp's legal troubles include:
 
-GvardeyskAmerica Shipping Plc
-ArawakFish Cargo Ges.m.b.h.
-Macaama Ocean Worldwide LLC
-Oka Charter Boat Transport OJSC
-Naddi Conti
-Liam Conti
-Namorna Transit Ltd.
-AguaLeska Transit N.V.
-StichtingMarine Shipping Company
-Savanteak Creek Solutions NV
-NyanzaRiver Worldwides A/S
-KisumaSeafoodBrothers Ltd.
+GvardeyskAmerica Shipping Plc,
+ArawakFish Cargo Ges.m.b.h.,
+Macaama Ocean Worldwide LLC,
+Oka Charter Boat Transport OJSC,
+Naddi Conti,
+Liam Conti,
+Namorna Transit Ltd.,
+AguaLeska Transit N.V.,
+StichtingMarine Shipping Company,
+Savanteak Creek Solutions NV,
+NyanzaRiver Worldwides A/S,
+KisumaSeafoodBrothers Ltd.,
 RecHfish Freight Plc.
+
 These companies have either gained new connections, strengthened existing ones, or maintained a stable position while others might have struggled, suggesting they capitalized on the market disruptions caused by SouthSeafood Express Corp's legal issues.
 ----
 
