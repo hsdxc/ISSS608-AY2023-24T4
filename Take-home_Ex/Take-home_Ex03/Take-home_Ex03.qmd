@@ -1,0 +1,61 @@
+|                                |
+|--------------------------------|
+| title: "Take-home_Ex03"        |
+| author: "Mohamad Hafez Sidek"  |
+| date: "June 6, 2024"           |
+| date-modified: "last-modified" |
+| execute:                       |
+| eval: true                     |
+| echo: true                     |
+| warning: false                 |
+| freeze: true
+| 
+| message=FALSE
+| 
+| freeze: true
+| 
+| warning=FALSE
+
+---
+Testing
+**Installing R Packages**
+
+```{r}
+
+pacman::p_load(ggraph,dendextend,tidygraph,jsonlite,dplyr,lubridate,igraph,ggplot2,gridExtra)
+```
+
+**\# Load JSON data**
+
+```{r}
+
+json_data <- fromJSON('data/MC3/mc3.json')
+```
+
+**\# Extract the nodes and edges**
+
+```{r}
+
+nodes <- json_data$nodes
+edges <- json_data$links
+```
+
+**\# Data Processing**
+
+```{r}
+
+# Ensure 'id' columns and edge 'source'/'target' columns are character type
+nodes$id <- as.character(nodes$id)
+edges$source <- as.character(edges$source)
+edges$target <- as.character(edges$target)
+
+# Convert date fields in nodes
+nodes$`founding_date` <- as.Date(nodes$`founding_date`, format = "%Y-%m-%d")
+nodes$`_last_edited_date` <- as.Date(nodes$`_last_edited_date`, format = "%Y-%m-%d")
+nodes$`_date_added` <- as.Date(nodes$`_date_added`, format = "%Y-%m-%d")
+
+# Convert date fields in edges
+edges$`start_date` <- as.Date(edges$`start_date`, format = "%Y-%m-%d")
+edges$`end_date` <- as.Date(edges$`end_date`, format = "%Y-%m-%d")
+
+```
