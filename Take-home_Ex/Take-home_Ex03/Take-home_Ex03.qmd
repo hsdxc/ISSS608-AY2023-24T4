@@ -17,24 +17,30 @@ execute:
 
 pacman::p_load(ggraph,dendextend,tidygraph,jsonlite,dplyr,lubridate,igraph,ggplot2,gridExtra)
 ```
+---
 
-***# Load JSON data**
+Load JSON data
 
+---
 ```{r}
 
 json_data <- fromJSON('data/MC3/mc3.json')
 ```
+---
 
-**\# Extract the nodes and edges**
+Extract the nodes and edges
 
+---
 ```{r}
 
 nodes <- json_data$nodes
 edges <- json_data$links
 ```
+---
 
-**\# Data Processing**
+Data Processing
 
+---
 ```{r}
 
 # Ensure 'id' columns and edge 'source'/'target' columns are character type
@@ -52,8 +58,10 @@ edges$`start_date` <- as.Date(edges$`start_date`, format = "%Y-%m-%d")
 edges$`end_date` <- as.Date(edges$`end_date`, format = "%Y-%m-%d")
 
 ```
+---
 
 
+---
 ```{r}
 
 
@@ -87,6 +95,8 @@ Are there any other suspicious transactions that may be related to illegal fishi
 ---
 
 Data Processing
+
+---
 ```{r}
 
 # Convert nodes to a data frame for filtering purposes
@@ -145,7 +155,7 @@ E(g)$color <- adjustcolor("gray", alpha.f = 0.5)  # Transparent edges
 # Plot the network graph
 plot(g, vertex.size = V(g)$size, vertex.label.cex = ifelse(V(g)$name %in% top_outliers$id, 0.8, 0.6), 
      vertex.color = V(g)$color, vertex.shape = V(g)$shape,
-     vertex.label = ifelse(V(g)$name %in% top_outliers$id, V(g)$name, NA), 
+     vertex.label = NA, 
      edge.color = E(g)$color, layout = layout_with_fr, 
      main = "Network Graph of Top Revenue Outliers")
 
