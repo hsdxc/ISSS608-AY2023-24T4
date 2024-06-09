@@ -104,9 +104,6 @@ fishing_companies <- fishing_companies %>%
 top_outliers <- fishing_companies %>%
   filter(revenue > quantile(revenue, 0.95, na.rm = TRUE))
 
-# Display top outliers
-print(top_outliers)
-
 # Extract the IDs of the top outliers
 top_outlier_ids <- top_outliers$id
 
