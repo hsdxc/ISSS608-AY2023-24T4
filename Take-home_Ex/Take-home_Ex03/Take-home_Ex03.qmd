@@ -177,25 +177,27 @@ create_dendrogram(filtered_nodes, after_edges, "After 2035-05-25")
 Before the Incident (2035-05-25)
 
 SouthSeafood Express Corp was closely connected to:
-Namorna Transit Ltd.
-AguaLeska Transit N.V.
-V. Miesel Shipping
-Tainamarine Fishing Co
-Elise Hauser
-Naddi Conti
-Liam Conti
-Savanteak Creek Solutions NV
-Oka Seafood Shipping Ges.m.b.h.
-Fintan Park
-Rafael Sanchez
-NyanzaRiver Worldwides A/S
-KisumaSeafoodBrothers Ltd.
-Fabio Conti
-RecHfish Freight Plc.
-James Bell
-The News Buoy
-Samuel Conti
-After the Incident (2035-05-25)
+
+Namorna Transit Ltd.,
+AguaLeska Transit N.V.,
+V. Miesel Shipping,
+Tainamarine Fishing Co,
+Elise Hauser,
+Naddi Conti,
+Liam Conti,
+Savanteak Creek Solutions NV,
+Oka Seafood Shipping Ges.m.b.h.,
+Fintan Park,
+Rafael Sanchez,
+NyanzaRiver Worldwides A/S,
+KisumaSeafoodBrothers Ltd.,
+Fabio Conti,
+RecHfish Freight Plc.,
+James Bell,
+The News Buoy,
+Samuel Conti.
+
+***After the Incident (2035-05-25)***
 SouthSeafood Express Corp is still present in the network but with some changes in its connections:
 The same immediate connections (Namorna Transit Ltd., AguaLeska Transit N.V.) remain.
 The branch it belongs to appears more consolidated, indicating possibly tighter or more scrutinized relationships.
