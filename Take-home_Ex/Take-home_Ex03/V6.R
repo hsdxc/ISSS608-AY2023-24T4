@@ -50,12 +50,15 @@ g <- graph_from_edgelist(edge_list, directed = FALSE)
 V(g)$revenue <- ifelse(V(g)$name %in% top_outliers$id, top_outliers$revenue[match(V(g)$name, top_outliers$id)], NA)
 V(g)$country <- ifelse(V(g)$name %in% top_outliers$id, top_outliers$country[match(V(g)$name, top_outliers$id)], NA)
 
-# Improve the layout and reduce label density
+# Set node sizes and colors
 V(g)$size <- ifelse(V(g)$name %in% top_outliers$id, 10, 5)  # Increase size for top outliers
 V(g)$color <- ifelse(V(g)$name %in% top_outliers$id, "skyblue", "orange")  # Different colors for top outliers
-E(g)$color <- "gray"  # Edge color
+V(g)$shape <- ifelse(V(g)$name %in% top_outliers$id, "square", "circle")  # Different shapes for top outliers
+E(g)$color <- adjustcolor("gray", alpha.f = 0.5)  # Transparent edges
 
-plot(g, vertex.size = V(g)$size, vertex.label.cex = 0.6, vertex.color = V(g)$color, 
+# Plot the network graph
+plot(g, vertex.size = V(g)$size, vertex.label.cex = ifelse(V(g)$name %in% top_outliers$id, 0.8, 0.6), 
+     vertex.color = V(g)$color, vertex.shape = V(g)$shape,
      vertex.label = ifelse(V(g)$name %in% top_outliers$id, V(g)$name, NA), 
      edge.color = E(g)$color, layout = layout_with_fr, 
      main = "Network Graph of Top Revenue Outliers")
