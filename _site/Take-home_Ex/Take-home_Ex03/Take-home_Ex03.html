@@ -221,16 +221,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggraph,dendextend,tidygraph,jsonlite,dplyr,lubridate,igraph,ggplot2,gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>*<strong># Load JSON data</strong></p>
+<hr>
+<p>Load JSON data</p>
+<hr>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>json_data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">'data/MC3/mc3.json'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong># Extract the nodes and edges</strong></p>
+<hr>
+<p>Extract the nodes and edges</p>
+<hr>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> json_data<span class="sc">$</span>nodes</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> json_data<span class="sc">$</span>links</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong># Data Processing</strong></p>
+<hr>
+<p>Data Processing</p>
+<hr>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure 'id' columns and edge 'source'/'target' columns are character type</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>nodes<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="fu">as.character</span>(nodes<span class="sc">$</span>id)</span>
@@ -246,6 +252,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>edges<span class="sc">$</span><span class="st">`</span><span class="at">start_date</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(edges<span class="sc">$</span><span class="st">`</span><span class="at">start_date</span><span class="st">`</span>, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>)</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>edges<span class="sc">$</span><span class="st">`</span><span class="at">end_date</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(edges<span class="sc">$</span><span class="st">`</span><span class="at">end_date</span><span class="st">`</span>, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<hr>
+<hr>
 <p><strong><em>Problem Statement 1:</em></strong> Identify the network associated with SouthSeafood Express Corp and visualize how this network and competing businesses change as a result of their illegal fishing behavior.</p>
 <p><strong><em>Analysis</em></strong></p>
 <hr>
@@ -255,60 +263,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong><em>Problem Statement 3:</em></strong> Are there any other suspicious transactions that may be related to illegal fishing?</p>
 <hr>
 <p>Data Processing</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert nodes to a data frame for filtering purposes</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nodes_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(nodes)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the dataset for companies involved in fishing, sea food, and seafood</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fishing_companies <span class="ot">&lt;-</span> nodes_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"fish|sea food|seafood"</span>, TradeDescription, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing or non-finite revenue values</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fishing_companies <span class="ot">&lt;-</span> fishing_companies <span class="sc">%&gt;%</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(revenue) <span class="sc">&amp;</span> <span class="fu">is.finite</span>(revenue))</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify top outliers by revenue (95th percentile)</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>top_outliers <span class="ot">&lt;-</span> fishing_companies <span class="sc">%&gt;%</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(revenue <span class="sc">&gt;</span> <span class="fu">quantile</span>(revenue, <span class="fl">0.95</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the IDs of the top outliers</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>top_outlier_ids <span class="ot">&lt;-</span> top_outliers<span class="sc">$</span>id</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert edges to a data frame for filtering purposes</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>edges_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(edges)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter edges to include only those related to top outliers</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>related_edges <span class="ot">&lt;-</span> edges_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">%in%</span> top_outlier_ids <span class="sc">|</span> target <span class="sc">%in%</span> top_outlier_ids)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an edge list for igraph</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>edge_list <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(related_edges[, <span class="fu">c</span>(<span class="st">"source"</span>, <span class="st">"target"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<hr>
+<table class="table">
+<colgroup>
+<col style="width: 5%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>::: {.cell}</td>
+</tr>
+<tr class="even">
+<td>```{.r .cell-code} # Convert nodes to a data frame for filtering purposes nodes_df &lt;- as.data.frame(nodes)</td>
+</tr>
+<tr class="odd">
+<td># Filter the dataset for companies involved in fishing, sea food, and seafood fishing_companies &lt;- nodes_df %&gt;% filter(grepl(“fish|sea food|seafood”, TradeDescription, ignore.case = TRUE))</td>
+</tr>
+<tr class="even">
+<td># Remove rows with missing or non-finite revenue values fishing_companies &lt;- fishing_companies %&gt;% filter(!is.na(revenue) &amp; is.finite(revenue))</td>
+</tr>
+<tr class="odd">
+<td># Identify top outliers by revenue (95th percentile) top_outliers &lt;- fishing_companies %&gt;% filter(revenue &gt; quantile(revenue, 0.95, na.rm = TRUE))</td>
+</tr>
+<tr class="even">
+<td># Extract the IDs of the top outliers top_outlier_ids &lt;- top_outliers$id</td>
+</tr>
+<tr class="odd">
+<td># Convert edges to a data frame for filtering purposes edges_df &lt;- as.data.frame(edges)</td>
+</tr>
+<tr class="even">
+<td># Filter edges to include only those related to top outliers related_edges &lt;- edges_df %&gt;% filter(source %in% top_outlier_ids | target %in% top_outlier_ids)</td>
+</tr>
+<tr class="odd">
+<td># Create an edge list for igraph edge_list &lt;- as.matrix(related_edges[, c(“source”, “target”)]) ``` :::</td>
+</tr>
+</tbody>
+</table>
 <p>Create graph</p>
 <hr>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create graph object</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">graph_from_edgelist</span>(edge_list, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add vertex attributes for revenue and country</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>revenue <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, top_outliers<span class="sc">$</span>revenue[<span class="fu">match</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name, top_outliers<span class="sc">$</span>id)], <span class="cn">NA</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>country <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, top_outliers<span class="sc">$</span>country[<span class="fu">match</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name, top_outliers<span class="sc">$</span>id)], <span class="cn">NA</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set node sizes and colors</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="dv">10</span>, <span class="dv">5</span>)  <span class="co"># Increase size for top outliers</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="st">"skyblue"</span>, <span class="st">"orange"</span>)  <span class="co"># Different colors for top outliers</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>shape <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="st">"square"</span>, <span class="st">"circle"</span>)  <span class="co"># Different shapes for top outliers</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">adjustcolor</span>(<span class="st">"gray"</span>, <span class="at">alpha.f =</span> <span class="fl">0.5</span>)  <span class="co"># Transparent edges</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the network graph</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g, <span class="at">vertex.size =</span> <span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="at">vertex.label.cex =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="fl">0.8</span>, <span class="fl">0.6</span>), </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">V</span>(g)<span class="sc">$</span>color, <span class="at">vertex.shape =</span> <span class="fu">V</span>(g)<span class="sc">$</span>shape,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="fu">V</span>(g)<span class="sc">$</span>name, <span class="cn">NA</span>), </span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> <span class="fu">E</span>(g)<span class="sc">$</span>color, <span class="at">layout =</span> layout_with_fr, </span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Network Graph of Top Revenue Outliers"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create graph object</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">graph_from_edgelist</span>(edge_list, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add vertex attributes for revenue and country</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>revenue <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, top_outliers<span class="sc">$</span>revenue[<span class="fu">match</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name, top_outliers<span class="sc">$</span>id)], <span class="cn">NA</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>country <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, top_outliers<span class="sc">$</span>country[<span class="fu">match</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name, top_outliers<span class="sc">$</span>id)], <span class="cn">NA</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set node sizes and colors</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="dv">10</span>, <span class="dv">5</span>)  <span class="co"># Increase size for top outliers</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="st">"skyblue"</span>, <span class="st">"orange"</span>)  <span class="co"># Different colors for top outliers</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>shape <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="st">"square"</span>, <span class="st">"circle"</span>)  <span class="co"># Different shapes for top outliers</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">adjustcolor</span>(<span class="st">"gray"</span>, <span class="at">alpha.f =</span> <span class="fl">0.5</span>)  <span class="co"># Transparent edges</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the network graph</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g, <span class="at">vertex.size =</span> <span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="at">vertex.label.cex =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>name <span class="sc">%in%</span> top_outliers<span class="sc">$</span>id, <span class="fl">0.8</span>, <span class="fl">0.6</span>), </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">V</span>(g)<span class="sc">$</span>color, <span class="at">vertex.shape =</span> <span class="fu">V</span>(g)<span class="sc">$</span>shape,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> <span class="fu">E</span>(g)<span class="sc">$</span>color, <span class="at">layout =</span> layout_with_fr, </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Network Graph of Top Revenue Outliers"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
