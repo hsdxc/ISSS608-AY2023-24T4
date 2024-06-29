@@ -196,7 +196,7 @@ install.packages("devtools")
 Install devtools
 ```{r}
 library(devtools)
-install_github("timelyportfolio/d3treeR")
+#install_github("timelyportfolio/d3treeR")
 ```
 
 ```{r}
