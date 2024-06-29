@@ -1,7 +1,6 @@
 ---
+Author: Mohamad Hafez bin Sidek
+---
 Welcome to the ISSS608 Visual Analytics and Applications Homepage
 
 In this website, you will find a comprehensive showcase of my coursework prepared for the ISSS608 course at SMU. This site is designed to provide a detailed overview of the various projects and assignments I have completed, highlighting the skills and techniques I have developed in the field of visual analytics.
-
-Author: Mohamad Hafez bin Sidek
----
