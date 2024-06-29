@@ -1,0 +1,82 @@
+---
+title: "In-class_Ex08b"
+author: "Mohamad Hafez Sidek"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+  message: false
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
+
+**Loading Data**
+
+```{r}
+sgpools <- read_csv("data/aspatial/SGPools_svy21.csv")
+```
+
+List Data
+```{r}
+list(sgpools) 
+```
+
+Creating a sf data frame from an aspatial data frame
+```{r}
+sgpools_sf <- st_as_sf(sgpools, 
+                       coords = c("XCOORD", "YCOORD"),
+                       crs= 3414)
+
+list(sgpools_sf)
+```
+
+Drawing Proportional Symbol Map
+```{r}
+tmap_mode("view")
+```
+
+It all started with an interactive point symbol map
+```{r}
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "red",
+           size = 1,
+           border.col = "black",
+           border.lwd = 1)
+```
+
+Lets make it proportional
+```{r}
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "red",
+           size = "Gp1Gp2 Winnings",
+           border.col = "black",
+           border.lwd = 1)
+```
+
+Lets give it a different colour
+```{r}
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1)
+```
+
+ I have a twin brothers :)
+```{r}
+tm_shape(sgpools_sf) +
+  tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1) +
+  tm_facets(by= "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+```

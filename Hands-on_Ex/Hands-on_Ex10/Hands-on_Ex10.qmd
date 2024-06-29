@@ -1,0 +1,100 @@
+---
+title: "In-class_Ex10"
+author: "Mohamad Hafez Sidek"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+  message: false
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load()
+```
+
+**Loading Data**
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```

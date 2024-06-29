@@ -5,6 +5,9 @@ library(tidygraph)
 library(jsonlite)
 library(dplyr)
 library(grid)
+library(ape)
+library(ggdendro)
+library(igraph)
 
 # Load JSON data
 file_path <- 'data/MC3/mc3.json'
@@ -24,6 +27,9 @@ if (is.null(edges)) {
   edges <- data.frame()
 }
 
+# Convert date columns to Date type
+edges$end_date <- as.Date(edges$end_date)
+
 # Check for NA or empty values in the node IDs or edge source/target
 if (any(is.na(nodes$id) | nodes$id == "")) {
   stop("NA or empty values found in node IDs.")
@@ -36,81 +42,58 @@ if (any(is.na(edges$source) | edges$source == "" | is.na(edges$target) | edges$t
 nodes <- nodes %>% filter(!is.na(id) & id != "")
 edges <- edges %>% filter(!is.na(source) & source != "" & !is.na(target) & target != "")
 
-# Convert edges to a list format for easy traversal
-edge_list <- split(edges[, c("target", "source")], seq(nrow(edges)))
+# Create a new label combining company name and revenue
+nodes$label <- paste(nodes$id, "- Revenue:", nodes$revenue)
 
-# Create an adjacency list
-adj_list <- list()
-for (edge in edge_list) {
-  source <- edge[1, "source"]
-  target <- edge[1, "target"]
-  
-  if (!source %in% names(adj_list)) {
-    adj_list[[source]] <- c()
-  }
-  if (!target %in% names(adj_list)) {
-    adj_list[[target]] <- c()
-  }
-  
-  adj_list[[source]] <- c(adj_list[[source]], target)
-  adj_list[[target]] <- c(adj_list[[target]], source)
-}
+# Create the graph using igraph
+graph <- graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
 
 # Function to perform BFS
-bfs <- function(adj_list, start_node) {
-  visited <- c()
-  queue <- c(start_node)
-  connected_nodes <- c()
-  
-  while (length(queue) > 0) {
-    current_node <- queue[1]
-    queue <- queue[-1]
-    
-    if (!current_node %in% connected_nodes) {
-      connected_nodes <- c(connected_nodes, current_node)
-      neighbors <- adj_list[[current_node]]
-      if (!is.null(neighbors)) {
-        queue <- c(queue, neighbors)
-      }
-    }
-  }
-  
-  return(connected_nodes)
+bfs <- function(graph, start_node) {
+  bfs_result <- bfs(graph, root = start_node, dist = TRUE)
+  return(bfs_result$order[bfs_result$order > 0])
 }
 
 # Find all nodes connected to "SouthSeafood Express Corp"
 target_company <- "SouthSeafood Express Corp"
-connected_nodes <- bfs(adj_list, target_company)
+connected_nodes <- bfs(graph, target_company)
 
 # Filter the nodes and edges based on connected nodes
 filtered_nodes <- nodes %>% filter(id %in% connected_nodes)
 filtered_edges <- edges %>% filter(source %in% connected_nodes & target %in% connected_nodes)
 
-# Ensure IDs are character type
-filtered_nodes$id <- as.character(filtered_nodes$id)
-filtered_edges$source <- as.character(filtered_edges$source)
-filtered_edges$target <- as.character(filtered_edges$target)
+# Key date
+key_date <- as.Date("2035-05-25")
 
-# Create an adjacency matrix
-adj_matrix <- matrix(0, nrow = nrow(filtered_nodes), ncol = nrow(filtered_nodes))
-rownames(adj_matrix) <- filtered_nodes$id
-colnames(adj_matrix) <- filtered_nodes$id
+# Separate the edges based on the key date
+before_edges <- filtered_edges %>% filter(is.na(end_date) | end_date <= key_date)
+after_edges <- filtered_edges %>% filter(is.na(end_date) | end_date >= key_date)
 
-for (i in 1:nrow(filtered_edges)) {
-  source <- filtered_edges[i, "source"]
-  target <- filtered_edges[i, "target"]
-  adj_matrix[source, target] <- 1
-  adj_matrix[target, source] <- 1
+# Function to create a dendrogram plot using ggdendro
+create_dendrogram <- function(nodes, edges, plot_title) {
+  # Create the graph using igraph
+  graph <- graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
+  
+  # Calculate the shortest path distances
+  dist_matrix <- distances(graph, v = V(graph), to = V(graph), weights = NA)
+  
+  # Create a hierarchical clustering object
+  hc <- hclust(as.dist(dist_matrix), method = "complete")
+  
+  # Convert to a dendrogram object
+  dend <- as.dendrogram(hc)
+  
+  # Convert the dendrogram to a format suitable for ggplot
+  dend_data <- dendro_data(dend)
+  
+  # Plot the dendrogram using ggdendro
+  ggdendrogram(dend_data, rotate = TRUE, theme_dendro = FALSE) +
+    ggtitle(plot_title) +
+    theme(plot.margin = unit(c(1, 15, 1, 1), "cm")) # Increase the right margin
 }
 
-# Create a dendrogram
-dendrogram <- as.dendrogram(hclust(dist(adj_matrix)))
+# Create and plot the "before" dendrogram
+create_dendrogram(filtered_nodes, before_edges, "Before 2035-05-25")
 
-# Plot the dendrogram using ggraph and add labels, then flip coordinates
-ggraph(dendrogram, 'dendrogram') + 
-  geom_edge_elbow() + 
-  geom_node_text(aes(label = label, filter = leaf), hjust = 0, nudge_x = 0.5, size = 3, angle = 0) +
-  coord_flip() +
-  scale_y_reverse() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(plot.margin = unit(c(1, 10, 1, 1), "cm")) # Significantly increased the right margin
+# Create and plot the "after" dendrogram
+create_dendrogram(filtered_nodes, after_edges, "After 2035-05-25")

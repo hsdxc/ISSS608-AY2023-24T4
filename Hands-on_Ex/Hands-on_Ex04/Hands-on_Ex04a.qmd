@@ -1,0 +1,147 @@
+---
+title: "In-class_Ex04a"
+author: "Mohamad Hafez Sidek"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+  message: false
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load(ggstatsplot, tidyverse)
+```
+
+**Loading Data**
+
+```{r}
+exam <- read.csv("data/Exam_data.csv")
+
+```
+
+One-sample test: gghistostats() method
+```{r}
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
+)
+```
+Two-sample mean test: ggbetweenstats()
+```{r}
+ggbetweenstats(
+  data = exam,
+  x = GENDER, 
+  y = MATHS,
+  type = "np",
+  messages = FALSE
+)
+```
+
+Oneway ANOVA Test: ggbetweenstats() method
+```{r}
+ggbetweenstats(
+  data = exam,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+Significant Test of Correlation: ggscatterstats()
+```{r}
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE,
+  )
+```
+
+Significant Test of Association (Depedence) : ggbarstats() methods
+```{r}
+exam1 <- exam %>% 
+  mutate(MATHS_bins = 
+           cut(MATHS, 
+               breaks = c(0,60,75,85,100))
+)
+```
+
+Using ggbarstats()
+```{r}
+ggbarstats(exam1, 
+           x = MATHS_bins, 
+           y = GENDER)
+```
+
+Installing R Packages
+```{r}
+pacman::p_load(readxl, performance, parameters, see)
+```
+
+Loading Data
+```{r}
+car_resale <- read_xls("data/ToyotaCorolla.xls", 
+                       "data")
+car_resale
+```
+
+Multiple Regression Model using lm()
+```{r}
+model <- lm(Price ~ Age_08_04 + Mfg_Year + KM + 
+              Weight + Guarantee_Period, data = car_resale)
+model
+```
+
+Model Diagnostic: checking for multicolinearity:
+```{r}
+check_c <- check_collinearity(model)
+plot(check_c)
+```
+
+Model Diagnostic: checking normality assumption
+```{r}
+model1 <- lm(Price ~ Age_08_04 + KM + 
+              Weight + Guarantee_Period, data = car_resale)
+
+check_n <- check_normality(model1)
+
+plot(check_n)
+```
+
+Model Diagnostic: Check model for homogeneity of variances
+```{r}
+check_h <- check_heteroscedasticity(model1)
+
+plot(check_h)
+```
+
+Model Diagnostic: Complete check
+```{r}
+check_model(model1)
+```
+
+Visualising Regression Parameters: see methods
+```{r}
+plot(parameters(model1))
+```
+
+Visualising Regression Parameters: ggcoefstats() methods
+```{r}
+ggcoefstats(model1, 
+            output = "plot")
+```

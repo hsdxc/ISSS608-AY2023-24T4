@@ -48,7 +48,7 @@ nodes$id <- make.unique(nodes$id)
 nodes$id[is.na(nodes$id)] <- paste0("NA_", seq_along(nodes$id[is.na(nodes$id)]))
 
 # Create a new label combining company name and revenue
-nodes$label <- paste(nodes$id, "-", nodes$name, "- Revenue:", nodes$revenue)
+nodes$label <- paste(nodes$id,",Rev:", nodes$revenue)
 
 # Function to perform BFS
 bfs <- function(edges, start_node) {
@@ -122,7 +122,7 @@ create_dendrogram <- function(nodes, edges, plot_title) {
   # Plot the dendrogram using ggdendro
   ggplot() +
     geom_segment(data = segment(dend_data), aes(x = x, y = y, xend = xend, yend = yend)) +
-    geom_text(data = label(dend_data), aes(x = x, y = y, label = labels), hjust = -0.1, size = 3) +
+    geom_text(data = label(dend_data), aes(x = x, y = y, label = labels), hjust = 0, size = 3) +
     coord_flip() +
     scale_y_reverse(expand = c(0.2, 0)) +
     ggtitle(plot_title) +

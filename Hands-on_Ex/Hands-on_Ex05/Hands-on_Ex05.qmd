@@ -1,0 +1,263 @@
+---
+title: "In-class_Ex05"
+author: "Mohamad Hafez Sidek"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+  message: false
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate, hms,
+tidyverse, tidygraph, ggraph, igraph)
+```
+
+**Loading Data**
+
+```{r}
+news20 <- "data/20news/"
+```
+
+Define a function to read all files from a folder into a data frame
+```{r}
+read_folder <- function(infolder) {
+  tibble(file = dir(infolder, 
+                    full.names = TRUE)) %>%
+    mutate(text = map(file, 
+                      read_lines)) %>%
+    transmute(id = basename(file), 
+              text) %>%
+    unnest(text)
+}
+```
+
+Reading in all the messages from the 20news folder
+```{r}
+raw_text <- tibble(folder = 
+                     dir(news20, 
+                         full.names = TRUE)) %>%
+  mutate(folder_out = map(folder, 
+                          read_folder)) %>%
+  unnest(cols = c(folder_out)) %>%
+  transmute(newsgroup = basename(folder), 
+            id, text)
+write_rds(raw_text, "data/news20.rds")
+```
+
+Initial EDA
+```{r}
+raw_text %>%
+  group_by(newsgroup) %>%
+  summarize(messages = n_distinct(id)) %>%
+  ggplot(aes(messages, newsgroup)) +
+  geom_col(fill = "lightblue") +
+  labs(y = NULL)
+```
+
+Introducing tidytext
+```{r}
+cleaned_text <- raw_text %>%
+  group_by(newsgroup, id) %>%
+  filter(cumsum(text == "") > 0,
+         cumsum(str_detect(
+           text, "^--")) == 0) %>%
+  ungroup()
+```
+
+Removing lines with nested text representing quotes from other users.
+```{r}
+cleaned_text <- cleaned_text %>%
+  filter(str_detect(text, "^[^>]+[A-Za-z\\d]")
+         | text == "",
+         !str_detect(text, 
+                     "writes(:|\\.\\.\\.)$"),
+         !str_detect(text, 
+                     "^In article <")
+  )
+```
+
+Text Data Processing
+```{r}
+usenet_words <- cleaned_text %>%
+  unnest_tokens(word, text) %>%
+  filter(str_detect(word, "[a-z']$"),
+         !word %in% stop_words$word)
+```
+
+
+```{r}
+usenet_words %>%
+  count(word, sort = TRUE)
+```
+
+Visualising Words in newsgroups
+```{r}
+
+words_by_newsgroup <- usenet_words %>%
+  count(newsgroup, word, sort = TRUE) %>%
+  ungroup()
+
+wordcloud(words_by_newsgroup$word,
+          words_by_newsgroup$n,
+          max.words = 300)
+```
+
+Visualising Words in newsgroups using ggplot
+```{r}
+set.seed(1234)
+
+words_by_newsgroup %>%
+  filter(n > 0) %>%
+ggplot(aes(label = word,
+           size = n)) +
+  geom_text_wordcloud() +
+  theme_minimal() +
+  facet_wrap(~newsgroup)
+```
+
+Basic Concept of TF-IDF
+```{r}
+tf_idf <- words_by_newsgroup %>%
+  bind_tf_idf(word, newsgroup, n) %>%
+  arrange(desc(tf_idf))
+```
+
+Visualising tf-idf as interactive table
+```{r}
+DT::datatable(tf_idf, filter = 'top') %>% 
+  formatRound(columns = c('tf', 'idf', 
+                          'tf_idf'), 
+              digits = 3) %>%
+  formatStyle(0, 
+              target = 'row', 
+              lineHeight='25%')
+```
+
+Visualising tf-idf within newsgroups
+```{r}
+tf_idf %>%
+  filter(str_detect(newsgroup, "^sci\\.")) %>%
+  group_by(newsgroup) %>%
+  slice_max(tf_idf, 
+            n = 12) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, 
+                        tf_idf)) %>%
+  ggplot(aes(tf_idf, 
+             word, 
+             fill = newsgroup)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ newsgroup, 
+             scales = "free") +
+  labs(x = "tf-idf", 
+       y = NULL)
+```
+
+Counting and correlating pairs of words with the widyr package
+```{r}
+newsgroup_cors <- words_by_newsgroup %>%
+  pairwise_cor(newsgroup, 
+               word, 
+               n, 
+               sort = TRUE)
+```
+
+Visualising correlation as a network
+```{r}
+set.seed(2017)
+
+newsgroup_cors %>%
+  filter(correlation > .025) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = correlation, 
+                     width = correlation)) +
+  geom_node_point(size = 6, 
+                  color = "lightblue") +
+  geom_node_text(aes(label = name),
+                 color = "red",
+                 repel = TRUE) +
+  theme_void()
+```
+
+Bigram
+```{r}
+
+bigrams <- cleaned_text %>%
+  unnest_tokens(bigram, 
+                text, 
+                token = "ngrams", 
+                n = 2)
+
+bigrams
+
+```
+
+Cleaning bigram
+```{r}
+bigrams_separated <- bigrams %>%
+  filter(bigram != 'NA') %>%
+  separate(bigram, c("word1", "word2"), 
+           sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+bigrams_filtered
+```
+
+Counting the bigram again
+```{r}
+bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+```
+
+Create a network graph from bigram data frame
+```{r}
+bigram_graph <- bigram_counts %>%
+  filter(n > 3) %>%
+  graph_from_data_frame()
+bigram_graph
+```
+
+Visualizing a network of bigrams with ggraph
+```{r}
+set.seed(1234)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_text(aes(label = name), 
+                 vjust = 1, 
+                 hjust = 1)
+```
+
+Revised version
+```{r}
+set.seed(1234)
+
+a <- grid::arrow(type = "closed", 
+                 length = unit(.15,
+                               "inches"))
+
+ggraph(bigram_graph, 
+       layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n), 
+                 show.legend = FALSE,
+                 arrow = a, 
+                 end_cap = circle(.07,
+                                  'inches')) +
+  geom_node_point(color = "lightblue", 
+                  size = 5) +
+  geom_node_text(aes(label = name), 
+                 vjust = 1, 
+                 hjust = 1) +
+  theme_void()
+```
