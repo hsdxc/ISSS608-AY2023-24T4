@@ -24,6 +24,7 @@ exam_data <- read.csv("data/Exam_data.csv")
 ```
 
 Tooltip effect with tooltip aesthetic
+
 ```{r}
 p <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -65,6 +66,7 @@ girafe(
 ```
 
 Interactivity
+
 ```{r}
 tooltip_css <- "background-color:white; #<<
 font-style:bold; color:black;" #<<
@@ -88,7 +90,8 @@ girafe(
 )                                        
 ```
 
- Customising Tooltip style
+Customising Tooltip style
+
 ```{r}
 tooltip_css <- "background-color:white; #<<
 font-style:bold; color:black;" #<<
@@ -113,6 +116,7 @@ girafe(
 ```
 
 Displaying statistics on tooltip
+
 ```{r}
 tooltip <- function(y, ymax, accuracy = .01) {
   mean <- scales::number(y, accuracy = accuracy)
@@ -141,6 +145,7 @@ girafe(ggobj = gg_point,
 ```
 
 Hover effect with data_id aesthetic
+
 ```{r}
 p <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -159,6 +164,7 @@ girafe(
 ```
 
 Styling hover effect
+
 ```{r}
 p <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -181,6 +187,7 @@ girafe(
 ```
 
 Combining tooltip and hover effect
+
 ```{r}
 p <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -204,6 +211,7 @@ girafe(
 ```
 
 Click effect with onclick
+
 ```{r}
 exam_data$onclick <- sprintf("window.open(\"%s%s\")",
 "https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
@@ -225,6 +233,7 @@ girafe(
 ```
 
 Coordinated Multiple Views with ggiraph
+
 ```{r}
 p1 <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -258,7 +267,8 @@ girafe(code = print(p1 + p2),
        ) 
 ```
 
- Creating an interactive scatter plot: plot_ly() method
+Creating an interactive scatter plot: plot_ly() method
+
 ```{r}
 plot_ly(data = exam_data, 
              x = ~MATHS, 
@@ -266,6 +276,7 @@ plot_ly(data = exam_data,
 ```
 
 Working with visual variable: plot_ly() method
+
 ```{r}
 plot_ly(data = exam_data, 
         x = ~ENGLISH, 
@@ -274,6 +285,7 @@ plot_ly(data = exam_data,
 ```
 
 Coordinated Multiple Views with plotly
+
 ```{r}
 d <- highlight_key(exam_data)
 p1 <- ggplot(data=d, 
@@ -294,11 +306,13 @@ subplot(ggplotly(p1),
 ```
 
 Interactive Data Table: DT package
+
 ```{r}
 DT::datatable(exam_data, class= "compact")
 ```
 
 Linked brushing: crosstalk method
+
 ```{r}
 d <- highlight_key(exam_data) 
 p <- ggplot(d, 

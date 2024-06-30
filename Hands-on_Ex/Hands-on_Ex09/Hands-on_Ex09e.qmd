@@ -24,6 +24,7 @@ realis2018 <- read_csv("data/realis2018.csv")
 ```
 
 Grouped summaries without the Pipe
+
 ```{r}
 realis2018_grouped <- group_by(realis2018, `Project Name`,
                                `Planning Region`, `Planning Area`, 
@@ -36,6 +37,7 @@ realis2018_summarised <- summarise(realis2018_grouped,
 ```
 
 Grouped summaries with the pipe
+
 ```{r}
 realis2018_summarised <- realis2018 %>% 
   group_by(`Project Name`,`Planning Region`, 
@@ -48,12 +50,14 @@ realis2018_summarised <- realis2018 %>%
 ```
 
 Designing Treemap with treemap Package
+
 ```{r}
 realis2018_selected <- realis2018_summarised %>%
   filter(`Property Type` == "Condominium", `Type of Sale` == "Resale")
 ```
 
 Using the basic arguments
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -65,6 +69,7 @@ treemap(realis2018_selected,
 ```
 
 Working with vColor and type argument
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -76,7 +81,8 @@ treemap(realis2018_selected,
         )
 ```
 
-The value” type treemap
+The value" type treemap
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -89,7 +95,8 @@ treemap(realis2018_selected,
         )
 ```
 
-The “manual” type treemap
+The "manual" type treemap
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -103,6 +110,7 @@ treemap(realis2018_selected,
 ```
 
 Single colour palette
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -116,6 +124,7 @@ treemap(realis2018_selected,
 ```
 
 Working with algorithm argument
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -130,6 +139,7 @@ treemap(realis2018_selected,
 ```
 
 Using sortID
+
 ```{r}
 treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
@@ -145,6 +155,7 @@ treemap(realis2018_selected,
 ```
 
 Designing a basic treemap
+
 ```{r}
 ggplot(data=realis2018_selected, 
        aes(area = `Total Unit Sold`,
@@ -156,6 +167,7 @@ ggplot(data=realis2018_selected,
 ```
 
 Defining hierarchy
+
 ```{r}
 ggplot(data=realis2018_selected, 
        aes(area = `Total Unit Sold`,
@@ -166,6 +178,7 @@ ggplot(data=realis2018_selected,
 ```
 
 Group by Planning Area
+
 ```{r}
 ggplot(data=realis2018_selected, 
        aes(area = `Total Unit Sold`,
@@ -176,6 +189,7 @@ ggplot(data=realis2018_selected,
 ```
 
 Adding boundary line
+
 ```{r}
 ggplot(data=realis2018_selected, 
        aes(area = `Total Unit Sold`,
@@ -189,14 +203,16 @@ ggplot(data=realis2018_selected,
 ```
 
 Installing d3treeR package
+
 ```{r}
 install.packages("devtools")
 ```
 
 Install devtools
+
 ```{r}
 library(devtools)
-##install_github("timelyportfolio/d3treeR")
+install_github("timelyportfolio/d3treeR")
 ```
 
 ```{r}
@@ -204,6 +220,7 @@ library(d3treeR)
 ```
 
 Designing An Interactive Treemap
+
 ```{r}
 tm <- treemap(realis2018_summarised,
         index=c("Planning Region", "Planning Area"),
