@@ -71,7 +71,8 @@ website:
           href: "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html"
       - href: index.qmd
         text: Home
-      - about.qmd
+      - text: Take-home Exercise
+        about.qmd
 
 format:
   html:
