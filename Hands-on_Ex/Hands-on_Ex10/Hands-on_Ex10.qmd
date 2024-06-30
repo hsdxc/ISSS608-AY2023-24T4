@@ -15,7 +15,7 @@ execute:
 
 ```{r}
 pacman::p_load(lubridate, ggthemes, reactable,
-reactablefmtr, gt, gtExtras, tidyverse,svglite)
+reactablefmtr, gt, gtExtras, tidyverse)
 ```
 
 **Loading Data**
