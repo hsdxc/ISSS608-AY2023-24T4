@@ -205,14 +205,14 @@ ggplot(data=realis2018_selected,
 Installing d3treeR package
 
 ```{r}
-install.packages("devtools")
+#install.packages("devtools")
 ```
 
 Install devtools
 
 ```{r}
-library(devtools)
-install_github("timelyportfolio/d3treeR")
+#library(devtools)
+#install_github("timelyportfolio/d3treeR")
 ```
 
 ```{r}
