@@ -1,8 +1,10 @@
 {
-  "hash": "76f44dfd080531992a30418ebe204106",
+  "hash": "f4e0f01e0262be6ff39b683fe6a02095",
   "result": {
-    "markdown": "---\ntitle: \"In-class_Ex02\"\nauthor: \"Mohamad Hafez Sidek\"\ndate: \"April 13, 2024\"\ndate-modified: \"last-modified\"\nexecute:\n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n**Installing R Packages**\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)\n```\n:::\n\n\n**Loading Data**\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data <- read_csv(\"data/Exam_data.csv\")\n```\n:::\n\n\nVisualing Histogram\n\n",
-    "supporting": [],
+    "markdown": "---\ntitle: \"In-class_Ex02\"\nauthor: \"Mohamad Hafez Sidek\"\ndate: \"April 13, 2024\"\ndate-modified: \"last-modified\"\nexecute:\n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n**Installing R Packages**\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse,ggplot2)\n```\n:::\n\n\n**Loading Data**\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data <- read_csv(\"data/Exam_data.csv\")\n```\n:::\n\n\nVisualing Histogram\n\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(data = exam_data,\n       aes(x=ENGLISH)) +\n  geom_histogram(bins=20,\n                 boundary = 100,\n                 color='grey25',\n                 fill='grey90') +\n  theme_gray() +\n  ggtitle(\"Distribution of English scores\")\n```\n\n::: {.cell-output-display}\n![](In-class_Ex02_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::",
+    "supporting": [
+      "In-class_Ex02_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],

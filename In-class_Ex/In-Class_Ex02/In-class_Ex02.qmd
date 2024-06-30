@@ -26,3 +26,13 @@ exam_data <- read_csv("data/Exam_data.csv")
 
 Visualing Histogram
 
+```{r}
+ggplot(data = exam_data,
+       aes(x=ENGLISH)) +
+  geom_histogram(bins=20,
+                 boundary = 100,
+                 color='grey25',
+                 fill='grey90') +
+  theme_gray() +
+  ggtitle("Distribution of English scores")
+```

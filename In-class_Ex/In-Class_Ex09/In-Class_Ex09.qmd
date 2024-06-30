@@ -1,0 +1,53 @@
+---
+title: "In-class_Ex09"
+author: "Mohamad Hafez Sidek"
+date: "May 04, 2024"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+
+---
+
+**Installing R Packages**
+
+```{r}
+pacman::p_load(scatterPlotMatrix, parallelPlot, cluster, factoextra, tidyverse)
+```
+
+------------------------------------------------------------------------
+
+**Loading Data**
+
+```{r}
+wine <- read_csv("data/wine_quality.csv")
+```
+
+------------------------------------------------------------------------
+
+**ggplot**
+
+```{r}
+ggplot(data = wine,
+       aes(x = type)) +
+  geom_bar()
+```
+
+**filter**
+
+```{r}
+whitewine <- wine %>%
+  filter(type == "white") %>%
+  select(c(1:11))
+```
+
+**scatterPlotMatrix**
+
+```{r}
+scatterPlotMatrix(whitewine,
+                  corrPlotType = "Text",
+                  distribType = 1,
+                  rotateTitle = TRUE,
+                  width = 500,
+                  height = 500)
+```

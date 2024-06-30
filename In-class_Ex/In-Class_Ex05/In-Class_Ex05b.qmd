@@ -12,27 +12,12 @@ execute:
 **Installing R Packages**
 
 ```{r}
-
 pacman::p_load(tidyverse,jsonlite)
-
 ```
 
 ```{r}
-
+mc1_data <-fromJSON("data/mc1.json")
+mc2_data <-fromJSON("data/mc2.json")
 mc3_data <-fromJSON("data/mc3.json")
 
 ```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-------------------------------------------------------------------------

@@ -20,10 +20,6 @@ pacman::p_load(tidyverse,ggstatsplot)
 **Loading Data**
 
 ```{r}
-new_path <-"D:/HS/ISSS608-AY2023-24T4/In-class_Ex/In-Class_Ex04/"
-
-setwd(new_path)
-
 exam <- read_csv("data/Exam_data.csv")
 ```
 
