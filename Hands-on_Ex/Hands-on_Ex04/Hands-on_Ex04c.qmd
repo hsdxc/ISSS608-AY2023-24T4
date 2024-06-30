@@ -41,9 +41,9 @@ funnel_plot(
   numerator = Death,
   denominator = Positive,
   group = `Sub-district`,
-  data_type = "PR",     #<<
-  xrange = c(0, 6500),  #<<
-  yrange = c(0, 0.05)   #<<
+  data_type = "PR",     
+  xrange = c(0, 6500),  
+  yrange = c(0, 0.05)
 )
 ```
 
