@@ -25,6 +25,7 @@ news20 <- "data/20news/"
 ```
 
 Define a function to read all files from a folder into a data frame
+
 ```{r}
 read_folder <- function(infolder) {
   tibble(file = dir(infolder, 
@@ -38,6 +39,7 @@ read_folder <- function(infolder) {
 ```
 
 Reading in all the messages from the 20news folder
+
 ```{r}
 raw_text <- tibble(folder = 
                      dir(news20, 
@@ -51,6 +53,7 @@ write_rds(raw_text, "data/news20.rds")
 ```
 
 Initial EDA
+
 ```{r}
 raw_text %>%
   group_by(newsgroup) %>%
@@ -61,6 +64,7 @@ raw_text %>%
 ```
 
 Introducing tidytext
+
 ```{r}
 cleaned_text <- raw_text %>%
   group_by(newsgroup, id) %>%
@@ -71,6 +75,7 @@ cleaned_text <- raw_text %>%
 ```
 
 Removing lines with nested text representing quotes from other users.
+
 ```{r}
 cleaned_text <- cleaned_text %>%
   filter(str_detect(text, "^[^>]+[A-Za-z\\d]")
@@ -83,6 +88,7 @@ cleaned_text <- cleaned_text %>%
 ```
 
 Text Data Processing
+
 ```{r}
 usenet_words <- cleaned_text %>%
   unnest_tokens(word, text) %>%
@@ -90,13 +96,13 @@ usenet_words <- cleaned_text %>%
          !word %in% stop_words$word)
 ```
 
-
 ```{r}
 usenet_words %>%
   count(word, sort = TRUE)
 ```
 
 Visualising Words in newsgroups
+
 ```{r}
 
 words_by_newsgroup <- usenet_words %>%
@@ -109,6 +115,7 @@ wordcloud(words_by_newsgroup$word,
 ```
 
 Visualising Words in newsgroups using ggplot
+
 ```{r}
 set.seed(1234)
 
@@ -122,6 +129,7 @@ ggplot(aes(label = word,
 ```
 
 Basic Concept of TF-IDF
+
 ```{r}
 tf_idf <- words_by_newsgroup %>%
   bind_tf_idf(word, newsgroup, n) %>%
@@ -129,6 +137,7 @@ tf_idf <- words_by_newsgroup %>%
 ```
 
 Visualising tf-idf as interactive table
+
 ```{r}
 DT::datatable(tf_idf, filter = 'top') %>% 
   formatRound(columns = c('tf', 'idf', 
@@ -140,6 +149,7 @@ DT::datatable(tf_idf, filter = 'top') %>%
 ```
 
 Visualising tf-idf within newsgroups
+
 ```{r}
 tf_idf %>%
   filter(str_detect(newsgroup, "^sci\\.")) %>%
@@ -160,6 +170,7 @@ tf_idf %>%
 ```
 
 Counting and correlating pairs of words with the widyr package
+
 ```{r}
 newsgroup_cors <- words_by_newsgroup %>%
   pairwise_cor(newsgroup, 
@@ -169,6 +180,7 @@ newsgroup_cors <- words_by_newsgroup %>%
 ```
 
 Visualising correlation as a network
+
 ```{r}
 set.seed(2017)
 
@@ -187,6 +199,7 @@ newsgroup_cors %>%
 ```
 
 Bigram
+
 ```{r}
 
 bigrams <- cleaned_text %>%
@@ -200,6 +213,7 @@ bigrams
 ```
 
 Cleaning bigram
+
 ```{r}
 bigrams_separated <- bigrams %>%
   filter(bigram != 'NA') %>%
@@ -214,12 +228,14 @@ bigrams_filtered
 ```
 
 Counting the bigram again
+
 ```{r}
 bigram_counts <- bigrams_filtered %>% 
   count(word1, word2, sort = TRUE)
 ```
 
 Create a network graph from bigram data frame
+
 ```{r}
 bigram_graph <- bigram_counts %>%
   filter(n > 3) %>%
@@ -228,6 +244,7 @@ bigram_graph
 ```
 
 Visualizing a network of bigrams with ggraph
+
 ```{r}
 set.seed(1234)
 
@@ -240,6 +257,7 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 Revised version
+
 ```{r}
 set.seed(1234)
 

@@ -45,7 +45,6 @@ website:
           href: "Hands-On_Ex/Hands-On_Ex09/Hands-On_Ex09e.html"
         - text: "Hands-On Exercise 10"
           href: "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html"
-      
       - text: In-class Exercise
         menu:
         - text: "In-class Exercise 1"
@@ -75,8 +74,7 @@ website:
       - text: "About"
         href: about.qmd   
         
-        
-
+    
 format:
   html:
     theme: cosmo
